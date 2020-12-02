@@ -10,18 +10,16 @@
 <body>
         <div class="row">
             <div class="col-10 offset-1 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 col-md-6 offset-md-3 col-sm-8 offset-sm-2">
-                <div class="alert alert-success alert-dismissible" id="alertType">
-                    <strong id="alertKey">Success!</strong> <span id="alertMessage"> a successful or positive action.</span>
-                </div>
+              <div class="alert alert-success" id="alertType">
+                <strong id="alertKey">Success!</strong>
+                <span id="alertMessage">
+                    a successful or positive action.</span>
+            </div>
                 <form class="mainForm p-3 m-2 shadow-lg">
                     <h1 class="display-5 text-center">Registration</h1>
                     <div class="form-group">
                       <label for="email" class="font-weight-bold">Email address</label>
                       <input type="email" class="form-control" id="email"placeholder="Enter your email">
-                    </div>
-                    <div class="form-group">
-                      <label for="password" class="font-weight-bold">Password</label>
-                      <input type="password" class="form-control" id="password" placeholder="Enter Password">
                     </div>
                     <div class="form-group">
                         <label for="firstname" class="font-weight-bold">First Name</label>
@@ -31,6 +29,11 @@
                         <label for="lastname" class="font-weight-bold">Last Name</label>
                         <input type="text" class="form-control" id="lastname" placeholder="Enter lastname">
                       </div>
+                      
+                    <div class="form-group">
+                      <label for="password" class="font-weight-bold">Password</label>
+                      <input type="password" class="form-control" id="password" placeholder="Enter Password">
+                    </div>
                     <div class="form-group text-right">
                         <input type="button" class="btn btn-primary btn-lg btn-block" value="Submit" onclick="register()">
                         </input>

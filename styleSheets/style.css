@@ -11,6 +11,15 @@ body{
 {
     display: none;
 }
-.loaderClass
+.centerDiv
 {
+    margin-top: 48vh;
+}
+.passwordResetDiv
+{
+    visibility: hidden;
+}
+canvas {
+    background-color: rgb(255, 244, 244);
+    font-weight: bold;
 }
