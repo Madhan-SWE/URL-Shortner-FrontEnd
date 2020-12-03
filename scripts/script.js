@@ -1,6 +1,5 @@
-
-const BACKEND_URL = "http://localhost:3000"
-const FRONT_END_URL = "http://127.0.0.1:5500/FrontEnd"
+const BACKEND_URL = "https://127.0.0.1:3000/"
+const FRONT_END_URL = "http://localhost:5500/FrontEnd"
 const SHORTENING_URL = FRONT_END_URL + "/short.html?token="
 
 function checkNull(element, elementName)
@@ -63,8 +62,6 @@ function login()
             "password": password
         }
 
-        console.log(data)
-
         fetch(BACKEND_URL + "/login", {
             method: "POST",
             body: JSON.stringify(data),
@@ -73,7 +70,6 @@ function login()
             }
         }).then((res)=>res.json())
         .then((res)=> {
-            console.log(res)
             if(!res.result)
             {
                 document.getElementById("alertType").className = '';
@@ -113,7 +109,6 @@ function register()
             }
         }).then((res)=>res.json())
         .then((res)=> {
-            console.log(res)
             if(!res.result)
             {
                 document.getElementById("alertType").className = '';
@@ -166,7 +161,6 @@ function confirmEmail()
             method: "POST"
         }).then((res)=>res.json())
         .then((res)=> {
-            console.log(res)
             if(!res.result)
             {
                 document.getElementById("alertType").className = '';
@@ -182,7 +176,6 @@ function confirmEmail()
             method: "POST"
         }).then((res)=>res.json())
         .then((res)=> {
-            console.log(res)
             if(!res.result)
             {
                 document.getElementById("alertType").className = '';
@@ -259,7 +252,6 @@ function updatePassword()
             }
         }).then((res)=>res.json())
         .then((res)=> {
-            console.log(res)
             if(!res.result)
             {
                 document.getElementById("alertType").className = '';
@@ -295,7 +287,7 @@ function getURLs() {
     fetch(getURL, {
         headers: myHeaders
   
-      }).then((res) => res.json()).then((res) => { // console.log(res);
+      }).then((res) => res.json()).then((res) => { 
         if (!res.result) {
             if(res.status===403 || res.status === 401)
             {
@@ -374,7 +366,6 @@ function shortenURL()
     
     if(checkNull(url, "URL"))
     {
-        console.log("--",url)
         let data = {
             url: url
         }
@@ -384,7 +375,6 @@ function shortenURL()
             headers:myHeaders   
         }).then((res)=>res.json())
         .then((res)=> {
-            console.log(res)
             if(!res.result)
             {   
                 if(res.status===403 || res.status === 401)
@@ -418,7 +408,6 @@ function redirectURL()
     fetch(BACKEND_URL + "/redirect/"+token)
     .then((res)=>res.json())
     .then((res)=> {
-        console.log(res)
         if(!res.result)
         {
             if(res.status===403 || res.status === 401)
