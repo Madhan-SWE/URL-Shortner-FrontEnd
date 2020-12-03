@@ -1,5 +1,5 @@
-const BACKEND_URL = "https://127.0.0.1:3000/"
-const FRONT_END_URL = "http://localhost:5500/FrontEnd"
+const BACKEND_URL = "https://url-shortner-by-madhan.herokuapp.com"
+const FRONT_END_URL = "https://url-shortner-by-madhan.netlify.app"
 const SHORTENING_URL = FRONT_END_URL + "/short.html?token="
 
 function checkNull(element, elementName)
@@ -403,9 +403,19 @@ function redirectURL()
 
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const token = urlParams.get("token");
+    const urlToken = urlParams.get("token");
+    let token = sessionStorage.getItem("LoginToken");
+    if(!token)
+    {
+      window.location.href = "index.html"
+    }
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('authorization', token);
 
-    fetch(BACKEND_URL + "/redirect/"+token)
+    fetch(BACKEND_URL + "/redirect/"+urlToken, {
+        headers:myHeaders   
+    })
     .then((res)=>res.json())
     .then((res)=> {
         if(!res.result)
