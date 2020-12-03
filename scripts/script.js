@@ -1,6 +1,7 @@
 
 const BACKEND_URL = "http://localhost:3000"
 const FRONT_END_URL = "http://127.0.0.1:5500/FrontEnd"
+const SHORTENING_URL = FRONT_END_URL + "/short.html?token="
 
 function checkNull(element, elementName)
 {
@@ -21,6 +22,35 @@ function goHome()
     window.location.href = FRONT_END_URL;
 }
 
+function isLogin()
+{
+    let getURL = BACKEND_URL + "/login";
+    let token = sessionStorage.getItem("LoginToken");
+    if(!token)
+    {
+      window.location.href = "index.html"
+    }
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('authorization', token);
+
+    fetch(getURL, {
+        headers: myHeaders
+      }).then((res) => res.json())
+      .then((res) => { 
+        if (!res.result) {
+            window.location.href = "index.html"
+        }
+    });
+    return 
+}
+
+
+function deleteToken()
+{
+    sessionStorage.removeItem('LoginToken');
+    window.location.href = "index.html"
+}
 
 function login()
 {
@@ -51,11 +81,13 @@ function login()
                 document.getElementById("alertKey").innerText = "";
                 document.getElementById("alertMessage").innerText =  res.message;
                 document.getElementById("alertType").style.display = "block";
+                return
             }
+            sessionStorage.setItem("LoginToken", res.token);
+            window.location.href = "dashboard.html"
         })
-        return true
     }
-    return false
+    
 }
 
 function register()
@@ -246,4 +278,160 @@ function updatePassword()
         })
 
     }
+}
+
+
+function getURLs() {
+    let getURL = BACKEND_URL + "/urls";
+    let token = sessionStorage.getItem("LoginToken");
+    if(!token)
+    {
+      window.location.href = "index.html"
+    }
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('authorization', token);
+
+    fetch(getURL, {
+        headers: myHeaders
+  
+      }).then((res) => res.json()).then((res) => { // console.log(res);
+        if (!res.result) {
+            if(res.status===403 || res.status === 401)
+            {
+                window.location.href = "index.html"
+            }
+            document.getElementById("alertType").className = '';
+            document.getElementById("alertType").classList.add("alert", "alert-danger");
+            document.getElementById("alertKey").innerText = "Fetch Error";
+            document.getElementById("alertMessage").innerText =  res.message;
+            document.getElementById("alertType").style.display = "block";
+            return 
+        }
+        if(res.body.length===0)
+        {
+            document.getElementById("alertType").className = '';
+            document.getElementById("alertType").classList.add("alert", "alert-danger");
+            document.getElementById("alertKey").innerText = "No data:";
+            document.getElementById("alertMessage").innerText =  "No URLs list found for the user!, ";
+            document.getElementById("alertType").style.display = "block";
+            return 
+        }
+
+        let table = document.createElement("table");
+        table.classList.add("table");
+
+        let thead = document.createElement("thead");
+        let trh = document.createElement("tr");
+        let th1 = document.createElement("th");
+        th1.setAttribute("scope", "col");
+        th1.innerText = "#";
+        let th2 = document.createElement("th");
+        th2.setAttribute("scope", "col");
+        th2.innerText = "URL";
+        let th3 = document.createElement("th");
+        th3.setAttribute("scope", "col");
+        th3.innerText = "Shortened URL";
+        
+
+        trh.append(th1, th2, th3);
+        thead.append(trh);
+        table.append(thead);
+
+        let tbody = document.createElement("tbody");
+        let rowNo = 1;
+        res.body.forEach((element) => {
+            let tr = document.createElement("tr");
+            let th1 = document.createElement("td");
+            th1.setAttribute("scope", "row");
+            th1.innerText = rowNo++;
+            let td2 = document.createElement("td");
+            td2.innerHTML = "<a href='"+ element.url + "'>" + element.url + "</a>";
+            let td3 = document.createElement("td");
+            td3.innerHTML = "<a href='"+ SHORTENING_URL + element.token + "' target='_blank'>" + SHORTENING_URL + element.token + "</a>" ;
+            
+            tr.append(th1, td2, td3);
+            tbody.append(tr);
+        });
+        table.append(tbody);
+        document.getElementById("tableConetent").append(table);
+    });
+}
+
+
+function shortenURL()
+{
+    let url = document.getElementById("url").value;
+    let token = sessionStorage.getItem("LoginToken");
+    if(!token)
+    {
+      window.location.href = "index.html"
+    }
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('authorization', token);
+
+    
+    if(checkNull(url, "URL"))
+    {
+        console.log("--",url)
+        let data = {
+            url: url
+        }
+        fetch(BACKEND_URL + "/shortenUrls", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers:myHeaders   
+        }).then((res)=>res.json())
+        .then((res)=> {
+            console.log(res)
+            if(!res.result)
+            {   
+                if(res.status===403 || res.status === 401)
+               {
+                  window.location.href = "index.html"
+                }
+                document.getElementById("alertType").className = '';
+                document.getElementById("alertType").classList.add("alert", "alert-danger");
+                document.getElementById("alertKey").innerText = res.status;
+                document.getElementById("alertMessage").innerText =  res.message;
+                document.getElementById("alertType").style.display = "block";
+                return 
+            }
+            document.getElementById("alertType").className = '';
+            document.getElementById("alertType").classList.add("alert", "alert-success");
+            document.getElementById("alertKey").innerText = res.message;
+            document.getElementById("alertMessage").innerText = " Shortened URL: " + SHORTENING_URL + res.token;
+            document.getElementById("alertType").style.display = "block";
+        
+        });
+    }
+}
+
+function redirectURL()
+{
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const token = urlParams.get("token");
+
+    fetch(BACKEND_URL + "/redirect/"+token)
+    .then((res)=>res.json())
+    .then((res)=> {
+        console.log(res)
+        if(!res.result)
+        {
+            if(res.status===403 || res.status === 401)
+            {
+                window.location.href = "index.html"
+            }
+            document.getElementById("alertType").className = '';
+            document.getElementById("alertType").classList.add("alert", "alert-danger", "alert-dismissible");
+            document.getElementById("alertKey").innerText = res.status;
+            document.getElementById("alertMessage").innerText =  res.message;
+            document.getElementById("alertType").style.display = "block";
+            return 
+        }
+        window.location.href = res.url;
+    });
 }

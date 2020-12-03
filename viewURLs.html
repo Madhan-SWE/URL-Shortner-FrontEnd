@@ -3,8 +3,6 @@
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>URL Shortner</title>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"/>
         <link rel="stylesheet" href="styleSheets/style.css"/>
     </head>
@@ -16,16 +14,16 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Dashboard
-                            <span class="sr-only">(current)</span>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">Dashboard                      
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="shorten.html">Shorten URL</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="viewURLs.html">Generated URLs</a>
+                        <span class="sr-only">(current)</span>
                     </li>
                 </ul>
                 <span class="navbar-text">
@@ -33,25 +31,19 @@
                 </span>
             </div>
         </nav>
-        <div class="container-fluid">
+        <div class="container">
             <div class="row">
-                <div class="col-md-10 offset-md-1">
-                    <h1 class="display-5 m-3">No Of URLs Generated Per Month</h1>
-                    <canvas id="myChart" width="800" height="300"></canvas>
-                    <div class="alert alert-danger" id="alertChart1">
-                        <strong > Barchart Not available </strong>
-                        <span>No data found for # urls per month</span>
+                <div class="col-12">
+                    <h1 class="display-5 m-3">MY URLs</h1>
+                    <div class="alert alert-success" id="alertType">
+                        <strong id="alertKey">Success!</strong>
+                        <span id="alertMessage">
+                            a successful or positive action.</span>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-10 offset-md-1">
-                    <h1 class="display-5 m-3">No Of URLs Generated Per Day</h1>
-                    <canvas id="myChart2" width="800" height="300"></canvas>
-                    <div class="alert alert-danger" id="alertChart2">
-                        <strong > Barchart Not available </strong>
-                        <span>No data found for # urls per month</span>
+                    <div class="table-responsive">
+                        <div id="tableConetent" class="table"></div>
                     </div>
+                    
                 </div>
             </div>
         </div>
@@ -59,10 +51,11 @@
         
         
 
-        <script src="scripts/script.js"></script>
-        <script src="scripts/drawChar.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <scrip src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></scrip>
-        
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script src="scripts/script.js"></script>
+        <script>
+            getURLs();
+        </script>
     </body>
 </html>
